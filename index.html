@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List - Created By Yasir Mukhtar</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            padding-top: 30px;
+        }
+
+        .container h1 {
+            text-align: center;
+            margin: 20px auto;
+        }
+
+        .notesdisplay {
+            margin: 10px auto;
+            width: 50%;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .nt {
+            margin-top: 20px;
+            border: 1px solid black;
+            padding: 10px 20px;
+            border-radius: 15px;
+        }
+
+        .nt p {
+            font-size: 20px;
+        }
+
+        .nt h1 {
+            font-size: 30px;
+        }
+
+        #addTxt {
+            border: 1px solid black;
+            border-radius: 10px;
+            font-size: 20px;
+            padding: 2px 3px;
+        }
+
+        #addTxt::placeholder {
+            color: black;
+            font-size: 20px;
+        }
+
+        #addBtn {
+            background-color: #8ff2f7;
+            outline: none;
+            height: 45px;
+            width: 100px;
+            margin-top: 4px;
+            border-radius: 10px;
+            font-size: 20px;
+        }
+
+        .addBtn {
+            background-color: #8ff2f7;
+            font-size: 13px;
+            height: 40px;
+            width: 90px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Notes App</h1>
+        <textarea id="addTxt" cols="50" rows="5" placeholder="Add Your Note"></textarea>
+        <button id="addBtn">Add Note</button>
+        <br><br><br>
+
+
+        <div id="notes" class="notesdisplay">
+
+        </div>
+    </div>
+
+
+
+
+    <script>
+
+
+        showNotes();
+
+        let addBtn = document.getElementById("addBtn");
+        addBtn.addEventListener("click", function (e) {
+
+            let addTxt = document.getElementById("addTxt");
+            let notes = localStorage.getItem("notes");
+            if (notes == null) {
+                notesObj = [];
+            } else {
+                notesObj = JSON.parse(notes);
+            }
+            notesObj.push(addTxt.value);
+            localStorage.setItem("notes", JSON.stringify(notesObj));
+            addTxt.value = "";
+            
+            showNotes();
+        })
+
+// ------------  Getting Notes from Local storage ----------------
+
+        function showNotes() {
+            let notes = localStorage.getItem("notes");
+            if (notes == null) {
+                notesObj = [];
+            } else {
+                notesObj = JSON.parse(notes);
+            }
+            let html = "";
+            notesObj.forEach(function (element, index) {
+
+
+                if (index == 0) {
+                    html += `<div class="nt">
+                             <h1>Notes App --- Developed By Yasir Mukhtar.</h1>
+                             <p>My first note App.Just click on add note for adding your notes in your local storage and click on delete button for deleting notes.</p>
+                             <button id=""  onclick="deleteNote(this.id)" class="addBtn">Delete note</button> </div> `;
+
+                } else {
+                    html += `<div class="nt">
+                             <h3>Your Note</h3>
+                             <p>${element}</p>
+                             <button id="${index}"  onclick="deleteNote(this.id)" class="addBtn">Delete note</button> </div> `;
+
+                }
+
+
+            });
+// ----------- Showing Added Notes in HTML ---------------
+
+            let notesel = document.getElementById("notes");
+            if (notesObj.length != 0) {
+                notesel.innerHTML = html;
+            } 
+                
+
+            
+        }
+// ------------- Delete Button Code --------------
+
+        function deleteNote(index) {
+            let notes = localStorage.getItem("notes");
+            if (notes == null) {
+                notesObj = [];
+            } else {
+                notesObj = JSON.parse(notes);
+            }
+            notesObj.splice(index, 1);
+            localStorage.setItem("notes", JSON.stringify(notesObj));
+
+            showNotes();
+
+        }
+
+    </script>
+</body>
+
+</html>
